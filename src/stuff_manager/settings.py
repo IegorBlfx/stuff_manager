@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.account',
+    'phone_field',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,4 @@ USE_TZ = False
 STATIC_URL = '/static/'
 #custom settings
 AUTH_USER_MODEL = 'account.User'
+

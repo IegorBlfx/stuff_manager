@@ -1,8 +1,12 @@
 from django.contrib import admin
-from apps.account.models import User
+from apps.account.models import User, City, Position, Department
 
 class UserAdmin(admin.ModelAdmin):
-    readonly_fields = ('password',)
-admin.site.register(User, UserAdmin)
+    readonly_fields = ('password', 'username', 'last_login', 'date_joined')
 
-#TODO make readonly fields: username; date_joined, password, last_login
+
+admin.site.register(User, UserAdmin)
+admin.site.register(City)
+admin.site.register(Position)
+admin.site.register(Department)
+
