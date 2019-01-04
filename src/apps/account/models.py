@@ -13,13 +13,7 @@ class User(AbstractUser):
     city = models.ForeignKey('account.City', null=True, on_delete=models.SET_NULL)
     address = models.TextField(null=True, blank=True)
     position = models.ForeignKey('account.Position', null=True, on_delete=models.SET_NULL)
-    #salary = models.CharField(max_length=100,default=0)
     hired = models.DateField(default=date.today())
-    #vacation_balance = models.ForeignKey(
-    #    'account.Position',
-    #    to_field='vocation_on_position',
-    #    on_delete=models.SET_NULL
-    #)
 
     def get_salary(self):
         if self.position is not None:
@@ -42,9 +36,8 @@ class User(AbstractUser):
 
 class City(models.Model):
     name = models.TextField(
-        null=False,
-        blank=False,
-        unique=True,
+        null=True,
+        blank=True,
         max_length=100
      )
 
@@ -56,7 +49,7 @@ class City(models.Model):
 class Position(models.Model):
     name = models.TextField(null=True, blank=True, unique=True,)
     department = models.ForeignKey('account.Department', null=True, on_delete=models.SET_NULL)
-    salary = models.CharField(max_length=10)
+    salary = models.CharField(null=True, blank=True, max_length=10, default=3200)
     vocation_on_position = models.SmallIntegerField(blank=True, null=True)
 
     def __str__(self):
@@ -65,7 +58,7 @@ class Position(models.Model):
 class Department(models.Model):
     name = models.TextField(
         null=True,
-        blank=False,
+        blank=True,
         unique=True,
     )
 
