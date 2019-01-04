@@ -13,13 +13,31 @@ class User(AbstractUser):
     city = models.ForeignKey('account.City', null=True, on_delete=models.SET_NULL)
     address = models.TextField(null=True, blank=True)
     position = models.ForeignKey('account.Position', null=True, on_delete=models.SET_NULL)
-    #salary = models.ForeignKey('account.Position',related_name='salary+', null=True, on_delete=models.SET_NULL)
+    #salary = models.CharField(max_length=100,default=0)
     hired = models.DateField(default=date.today())
     #vacation_balance = models.ForeignKey(
     #    'account.Position',
     #    to_field='vocation_on_position',
     #    on_delete=models.SET_NULL
     #)
+
+    def get_salary(self):
+        if self.position is not None:
+            return self.position.salary
+
+
+    def get_salary_clear(self):
+        tax = self.city.country.tax
+        salary_clear = self.get_salary() * (1-tax/100)
+        return salary_clear
+
+    def get_salary_clear_per_year(self):
+        salary_clear_per_year = self.get_salary_clear()*12
+        return salary_clear_per_year
+
+    def get_salary_per_year(self):
+        salary_per_year = self.get_salary() * 12
+        return salary_per_year
 
 
 class City(models.Model):
@@ -32,11 +50,12 @@ class City(models.Model):
 
     def __str__(self):
         return self.name
+    country = models.ForeignKey('account.Country', null=True, blank=True, max_length=100, on_delete=models.SET_NULL)
 
 
 class Position(models.Model):
     name = models.TextField(null=True, blank=True, unique=True,)
-    department = models.ForeignKey('account.Department',null=True ,on_delete=models.SET_NULL)
+    department = models.ForeignKey('account.Department', null=True, on_delete=models.SET_NULL)
     salary = models.CharField(max_length=10)
     vocation_on_position = models.SmallIntegerField(blank=True, null=True)
 
@@ -52,3 +71,13 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
+
+class Country(models.Model):
+
+    name = models.TextField(null=True, blank=True, max_length=100)
+    tax = models.PositiveSmallIntegerField(null=False, blank=False, default=40)
+
+    def __str__(self):
+        return self.name
+
+
