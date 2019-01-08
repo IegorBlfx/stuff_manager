@@ -1,8 +1,11 @@
 from django.urls import path
-#from django.urls import include
-from apps.account.views import index, profile
+
+from apps.account.views import index, profile, contact_us
+
+app_name = 'account'
 
 urlpatterns = [
-    path('index/', index),
-    path('profile/<int:user_id>', profile),
+    path('index/', index, name='index'),
+    path('profile/<int:user_id>', profile, name='profile'),
+    path('contact-us', contact_us, name='contact-us')
 ]
