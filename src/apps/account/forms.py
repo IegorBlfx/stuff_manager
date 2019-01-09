@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from apps.account.models import User, ContactUs
 
 
+
 class ProfileForm(ModelForm):
 
     class Meta:
@@ -15,7 +16,7 @@ class ProfileForm(ModelForm):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        # TODO
+
 
 class ContactUsForm (ModelForm):
 
