@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from apps.account.models import User, ContactUs
+from apps.account.models import User, ContactUs , RequestDayOff
 
 
 
@@ -28,3 +28,19 @@ class ContactUsForm (ModelForm):
             'text'
         ]
 
+
+class RequestDayOffForm(ModelForm):
+
+    class Meta:
+        model = RequestDayOff
+        fields = [
+            'user',
+            'from_date',
+            'to_date'
+        ]
+
+    def clean(self):
+        start_date = self.cleaned_data.get("from_date")
+        end_date = self.cleaned_data.get("to_date")
+        if end_date < start_date:
+            raise ValueError('incorrect Value')

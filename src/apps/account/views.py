@@ -1,10 +1,10 @@
 from django.http import HttpResponse,Http404
-from apps.account.models import User
-from django.shortcuts import get_object_or_404, render, redirect
-from apps.account.forms import ProfileForm, ContactUsForm
+from apps.account.models import User, RequestDayOff
+from django.shortcuts import get_object_or_404, render, redirect, _get_queryset
+from apps.account.forms import ProfileForm, ContactUsForm, RequestDayOffForm
 from django.core.mail import send_mail
 from django.conf import settings
-
+from django.urls import reverse
 
 def index(request):
     return HttpResponse('Index')
@@ -36,6 +36,28 @@ def contact_us(request):
     context = {'form': form}
     return render(request, 'account/contact_us.html', context=context)
 
+
+def faq(request):
+    return render(request, 'account/faq.html')
+
+
+def tos(request):
+    return render(request, 'account/tos.html')
+
+
+def request_day_off(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'GET':
+        form = RequestDayOffForm()
+    elif request.method == 'POST':
+        form = RequestDayOffForm(request.POST)
+        if form.is_valid() and form.clean():
+            form.save()
+
+    context = {'form': form}
+    return render(request, 'account/request_day_off.html', context=context)
+
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -53,3 +75,4 @@ def _email(request, email_for):
     send_mail(subject, message, email_from, recipient_list)
     return
 
+#Where i must write my functions
