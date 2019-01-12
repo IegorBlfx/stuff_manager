@@ -4,15 +4,13 @@ from django.shortcuts import get_object_or_404, render, redirect, _get_queryset
 from apps.account.forms import ProfileForm, ContactUsForm, RequestDayOffForm
 from django.core.mail import send_mail
 from django.conf import settings
-from django.urls import reverse
+#from django.urls import reverse
 
 def index(request):
     return HttpResponse('Index')
 
 def profile(request, user_id):
-
     user = get_object_or_404(User, id=user_id)
-
     if request.method == 'GET':
         form = ProfileForm(instance=user)
     elif request.method == 'POST':
@@ -48,10 +46,11 @@ def tos(request):
 def request_day_off(request, user_id):
     user = get_object_or_404(User, id=user_id)
     if request.method == 'GET':
-        form = RequestDayOffForm()
+        form = RequestDayOffForm(initial={'user':user, 'name':f'Request from {user}'})
     elif request.method == 'POST':
-        form = RequestDayOffForm(request.POST)
-        if form.is_valid() and form.clean():
+        form = RequestDayOffForm(request.POST, initial={'user':user, 'name':f'Request from {user}'})
+        if form.is_valid():
+            form.clean()
             form.save()
 
     context = {'form': form}
@@ -76,3 +75,5 @@ def _email(request, email_for):
     return
 
 #Where i must write my functions
+#How create password from shell?
+#when i change user in profile, information of 1 user was chanched, but user, that is TRUe doesn't

@@ -34,6 +34,7 @@ class RequestDayOffForm(ModelForm):
     class Meta:
         model = RequestDayOff
         fields = [
+            'name',
             'user',
             'from_date',
             'to_date'

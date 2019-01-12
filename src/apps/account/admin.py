@@ -3,7 +3,7 @@ from apps.account.models import *
 
 
 class UserAdmin(admin.ModelAdmin):
-    readonly_fields = ('password', 'username', 'last_login', 'date_joined','get_salary')
+    #readonly_fields = ('password', 'username', 'last_login', 'date_joined','get_salary')
     search_fields = ['phone', 'email']
     list_display = ('username', 'get_salary',)
     list_filter = ('position',)

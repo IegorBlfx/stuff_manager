@@ -92,7 +92,7 @@ class RequestDayOff(models.Model):
         ('D', 'Declaine'),
         )
     user = models.ForeignKey('account.User', null=True, blank=True, on_delete=models.SET_NULL, related_name='days_off')
-    name = models.CharField(max_length=100,default=f'Request day application from {user}', blank=False, null=False)
+    name = models.CharField(max_length=100, blank=False, null=False)
     from_date = models.DateField()
     to_date = models.DateField()
     confirmed = models.CharField(max_length=1, blank=True, null=True, choices=LIST_OF_CHOICES)
