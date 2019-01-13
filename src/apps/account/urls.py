@@ -6,6 +6,6 @@ app_name = 'account'
 
 urlpatterns = [
     path('index/', index, name='index'),
-    path('profile/<int:user_id>', profile, name='profile'),
+    path('profile/', profile, name='profile'),
     path('contact-us', contact_us, name='contact-us')
 ]
