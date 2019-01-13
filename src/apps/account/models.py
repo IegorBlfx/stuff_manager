@@ -15,6 +15,10 @@ class User(AbstractUser):
     position = models.ForeignKey('account.Position', null=True, on_delete=models.SET_NULL)
     hired = models.DateField(default=date.today())
 
+    def save(self, *args, **kwargs):
+        self.username = self.email
+        super().save(*args, **kwargs)
+
     def get_salary(self):
         if self.position is not None:
             return self.position.salary
