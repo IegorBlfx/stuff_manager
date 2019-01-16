@@ -2,6 +2,7 @@ from django.db import models
 from phone_field import PhoneField
 from django.contrib.auth.models import AbstractUser
 from datetime import date
+from apps import model_choices as mch
 
 
 
@@ -14,6 +15,12 @@ class User(AbstractUser):
     address = models.CharField(null=True, blank=True,max_length=100)
     position = models.ForeignKey('account.Position', null=True, on_delete=models.SET_NULL)
     hired = models.DateField(default=date.today())
+    vacations_days = models.PositiveSmallIntegerField(null=False, blank=False, default=0)
+    sickness_days = models.PositiveSmallIntegerField(null=False,blank=False, default=0)
+
+    def save(self, *args, **kwargs):
+        self.username = self.email
+        super().save(*args, **kwargs)
 
     def get_salary(self):
         if self.position is not None:
@@ -33,6 +40,27 @@ class User(AbstractUser):
     def get_salary_per_year(self):
         salary_per_year = self.get_salary() * 12
         return salary_per_year
+    #prevent User delete
+
+
+class RequestDayOff(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dayoffs')
+    created = models.DateTimeField(auto_now_add=True)
+    date_from = models.DateTimeField(null=False, blank=False)
+    date_from = models.DateTimeField(null=False, blank=False)
+    type = models.PositiveSmallIntegerField(
+        null=False, blank=False,
+        choices=mch.REQUEST_TYPES,
+        default=mch.STATUS_PENDING,
+    )
+    reason = models.CharField(max_length=256) # reason required when status = Rejected
+    #confirmed = models.NullBooleanField(default=None)
+    status = models.PositiveSmallIntegerField(
+        null=False, blank=False,
+        choices=mch.STATUSES ,
+        default=mch.STATUS_PENDING,
+    )
+
 
 
 class City(models.Model):

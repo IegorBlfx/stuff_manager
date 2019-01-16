@@ -7,9 +7,9 @@ from apps.account.forms import ProfileForm, ContactUsForm
 def index(request):
     return HttpResponse('Index')
 
-def profile(request, user_id):
-
-    user = get_object_or_404(User, id=user_id)
+def profile(request):
+    user = request.user
+    #user = get_object_or_404(User, id=user_id)
 
     if request.method == 'GET':
         form = ProfileForm(instance=user)

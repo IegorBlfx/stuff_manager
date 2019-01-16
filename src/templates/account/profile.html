@@ -7,7 +7,7 @@
 <body>
 User Profile:
 
-<form action="{% url 'account:profile' user.id %}" method="POST">
+<form action="{% url 'account:profile' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="OK">
