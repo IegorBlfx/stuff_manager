@@ -1,8 +1,8 @@
-New branch
-Add email (from git-version)
-Test
-Celery + settings
-Add user
+
+
+Test?????
+
+
 
 1. RequestDayOffForm (def clean, watch comments)  !!!
 2. RequestDayOff Model def __str__
