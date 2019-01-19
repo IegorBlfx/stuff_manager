@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from apps.account.forms import ProfileForm, ContactUsForm, RequestDayOffForm
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def index(request):
@@ -29,6 +31,9 @@ def contact_us(request):
         form = ContactUsForm(request.POST)
         if form.is_valid():
             form.save()
+            email = request.POST.get('email_from')
+            _email(request, email_for=email)
+            return redirect('/account/index/')
     context = {'form': form}
     return render(request, 'account/contact_us.html', context=context)
 
@@ -54,4 +59,12 @@ def create_request(request):
             return redirect(reverse('account:index'))
     context = {'form': form}
     return render(request, 'account/create-request.html', context=context)
+
+def _email(request, email_for):
+    subject = 'Thank you for your information'
+    message = ' it  means a world to us '
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [f'{email_for}', ]
+    send_mail(subject, message, email_from, recipient_list)
+    return
 
