@@ -1,0 +1,12 @@
+New branch
+Add email (from git-version)
+Test
+Celery + settings
+Add user
+
+1. RequestDayOffForm (def clean, watch comments)  !!!
+2. RequestDayOff Model def __str__
+3. RequestDayOff add to Admin status + type filters
+4. RequestDayOffAdmin
+  - def get_readonly_fields()
+  - if obj.status != mch.STATUS_PENDING make status field readonly
