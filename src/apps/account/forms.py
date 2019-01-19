@@ -70,7 +70,7 @@ class RequestDayOffForm(forms.ModelForm):
             if np.busday_count(cleaned_data['date_from'],
                                cleaned_data['date_to']) > 20:
                 self.add_error('date_to', 'You can request 20 days maximum')
-            if np.busday_count(cleaned_data['date_from'], cleaned_data['date_to']) > self.user.vacations_days:\
+            if np.busday_count(cleaned_data['date_from'], cleaned_data['date_to']) > self.user.vacations_days:
                 self.add_error('date_to', "You can't more days, than you have")
 
             # 1 dayoff is only for one day (more is vacation)

@@ -4,7 +4,7 @@ Test?????
 
 
 
-1. RequestDayOffForm (def clean, watch comments)  !!!
+
 2. RequestDayOff Model def __str__
 3. RequestDayOff add to Admin status + type filters
 4. RequestDayOffAdmin

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from apps.account.models import *
 from apps.account.forms import UserAdminForm
+from apps import model_choices as mch
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -43,9 +44,15 @@ class ContactUsAdmin(admin.ModelAdmin):
 
 @admin.register(RequestDayOff)
 class RequestDayOffAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = []
+    list_display = ('user', 'status',)
+    list_filter = ('type', 'status',)
 
-
+    def get_readonly_fields(self, request, obj=None):
+        if obj is not None:
+            if obj.status != mch.STATUS_PENDING:
+                return ['user', 'created', 'date_from', 'date_to','type', 'reason', 'status']
+        return []
 
 
 

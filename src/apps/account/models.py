@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError
 from phone_field import PhoneField
 from django.contrib.auth.models import AbstractUser
 from datetime import date
@@ -60,6 +60,15 @@ class RequestDayOff(models.Model):
         choices=mch.STATUSES,
         default=mch.STATUS_PENDING,
     )
+
+    def save(self, *args, **kwargs):
+        if self.date_from > self.date_to:
+            raise IntegrityError('date_from must be less, than date_to')
+        super().save(*args, **kwargs)
+
+    #def __str__(self):
+        #return 'request'
+
 
     # TODO
     # override save method, if date_from > date_to -> raise IntegrityError('error message') (from db)
