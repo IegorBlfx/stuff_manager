@@ -47,8 +47,8 @@ class User(AbstractUser):
 class RequestDayOff(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dayoffs')
     created = models.DateTimeField(auto_now_add=True)  # auto_now_add
-    date_from = models.DateTimeField(null=False, blank=False)
-    date_to = models.DateTimeField(null=False, blank=False)
+    date_from = models.DateField(null=False, blank=False)
+    date_to = models.DateField(null=False, blank=False)
     type = models.PositiveSmallIntegerField(
         null=False, blank=False,
         choices=mch.REQUEST_TYPES,

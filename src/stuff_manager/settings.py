@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.account',
     'phone_field',
+    'numpy',
+    'datetime',
 ]
 
 MIDDLEWARE = [
