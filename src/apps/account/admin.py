@@ -19,13 +19,34 @@ class UserAdmin(admin.ModelAdmin):
                 return UserAdminForm
             else:
                 return super().get_form(request, obj, **kwargs)
-
-
-
 admin.site.register(User, UserAdmin)
-admin.site.register(City)
-admin.site.register(Position)
-admin.site.register(Department)
-admin.site.register(Country)
-admin.site.register(ContactUs)
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Position)
+class PositionAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(ContactUs)
+class ContactUsAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(RequestDayOff)
+class RequestDayOffAdmin(admin.ModelAdmin):
+    pass
+
+
+
+
+
 
