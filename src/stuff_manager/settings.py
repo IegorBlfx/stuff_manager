@@ -129,5 +129,8 @@ USE_TZ = False
 STATIC_URL = '/static/'
 #custom settings
 AUTH_USER_MODEL = 'account.User'
-LOGIN_REDIRECT_URL = 'account:profile' #app name+ url name
 
+
+
+LOGIN_REDIRECT_URL = 'account:profile'  # app_name + url_name
+LOGOUT_REDIRECT_URL = 'account:index' # app_name + url_name

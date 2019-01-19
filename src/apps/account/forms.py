@@ -1,6 +1,6 @@
 #from django.forms import ModelForm
 from django import forms
-from apps.account.models import User, ContactUs
+from apps.account.models import User, ContactUs, RequestDayOff
 from django.db.models import Q
 
 
@@ -45,9 +45,33 @@ class UserAdminForm(forms.ModelForm):
         return cleaned_data
 
 
-    #def save(self, commit=True):
-        #instance = super().save(commit=False)
-        #instance.username = instance.email
-        #if commit:
-            #instance.save()
-        #return instance
+
+class RequestDayOffForm(forms.ModelForm):
+    class Meta:
+        model = RequestDayOff
+        fields = ['type', 'date_from', 'date_to']
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not self.errors:
+            # from pdb import set_trace
+            # set_trace()
+            if cleaned_data['date_from'] > cleaned_data['date_to']:
+                self.add_error('date_to',
+                               'date_from cannot be greater than date_to')
+            # 1 dayoff is only for one day (more is vacation)
+            # 2 date_to should be less than date_from
+            # 3 date_from - date_to (in days) should not be greater than 20 (do not count weekends)
+            # 4 dayoffs/vacation cannot be more than user has (user.vacation >= days)
+        return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.user = self.user
+        if commit:
+            instance.save()
+        return instance

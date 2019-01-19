@@ -1,24 +1,25 @@
-from django.http import HttpResponse,Http404
-from apps.account.models import User
-from django.shortcuts import get_object_or_404, render
-from apps.account.forms import ProfileForm, ContactUsForm
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from apps.account.forms import ProfileForm, ContactUsForm, RequestDayOffForm
 
 
 def index(request):
     return HttpResponse('Index')
 
+@login_required  # profile = login_required(profile)
 def profile(request):
     user = request.user
-    #user = get_object_or_404(User, id=user_id)
-
-    if request.method == 'GET':
+    if request.method == "GET":
         form = ProfileForm(instance=user)
-    elif request.method == 'POST':
+    elif request.method == "POST":
         form = ProfileForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            # TODO return redirect()
-    context = {'form':form}
+            return redirect(reverse('account:index'))
+
+    context = {'form': form}
     return render(request, 'account/profile.html', context=context)
 
 def contact_us(request):
@@ -39,5 +40,18 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
+@login_required
+def create_request(request):
+    user = request.user
+    base_form = RequestDayOffForm
 
+    if request.method == "GET":
+        form = base_form(user=user)
+    elif request.method == "POST":
+        form = base_form(request.POST, user=user)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('account:index'))
+    context = {'form': form}
+    return render(request, 'account/create-request.html', context=context)
 

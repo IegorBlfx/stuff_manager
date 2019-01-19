@@ -45,22 +45,26 @@ class User(AbstractUser):
 
 class RequestDayOff(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dayoffs')
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)  # auto_now_add
     date_from = models.DateTimeField(null=False, blank=False)
-    date_from = models.DateTimeField(null=False, blank=False)
+    date_to = models.DateTimeField(null=False, blank=False)
     type = models.PositiveSmallIntegerField(
         null=False, blank=False,
         choices=mch.REQUEST_TYPES,
-        default=mch.STATUS_PENDING,
+        default=mch.REQUEST_SICKNESS,
     )
-    reason = models.CharField(max_length=256) # reason required when status = Rejected
-    #confirmed = models.NullBooleanField(default=None)
+    reason = models.CharField(max_length=256, blank=True, null=True, default=None)  # reason required when status = REJECTED
     status = models.PositiveSmallIntegerField(
         null=False, blank=False,
-        choices=mch.STATUSES ,
+        choices=mch.STATUSES,
         default=mch.STATUS_PENDING,
     )
 
+    # TODO
+    # override save method, if date_from > date_to -> raise IntegrityError('error message') (from db)
+    # override __str__ (DO NOT USE self.user)
+    # def __str__(self):
+#     return self.user.email  # extra DB call NEVER DO THIS!!!
 
 
 class City(models.Model):
