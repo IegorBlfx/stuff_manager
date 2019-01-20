@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'phone_field',
     'numpy',
     'datetime',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'stuff_manager.middleware.TestMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'stuff_manager.urls'
@@ -143,3 +145,12 @@ EMAIL_HOST_PASSWORD = 'ntcnbhjdfybt123'
 
 LOGIN_REDIRECT_URL = 'account:profile'  # app_name + url_name
 LOGOUT_REDIRECT_URL = 'account:index' # app_name + url_name
+INTERNAL_IPS = '127.0.0.1'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+#CELERY_TIMEZONE = 'Asia/Makassar'
+CELERY_BEAT_SCHEDULE = {}

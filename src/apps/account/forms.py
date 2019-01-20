@@ -3,6 +3,7 @@ from django import forms
 from apps.account.models import User, ContactUs, RequestDayOff
 from django.db.models import Q
 import numpy as np
+from apps import model_choices as mch
 
 
 class ProfileForm(forms.ModelForm):
@@ -64,7 +65,7 @@ class RequestDayOffForm(forms.ModelForm):
             if cleaned_data['date_from'] > cleaned_data['date_to']:
                 self.add_error('date_to',
                                'date_from cannot be greater than date_to')
-            if cleaned_data['type'] is 3:
+            if cleaned_data['type'] is mch.REQUEST_DAYOFF:
                 if cleaned_data['date_from'] != cleaned_data['date_to']:
                     self.add_error('date_to', 'date_from must be equal to date_to')
             if np.busday_count(cleaned_data['date_from'],
@@ -83,5 +84,5 @@ class RequestDayOffForm(forms.ModelForm):
         instance = super().save(commit=False)
         instance.user = self.user
         if commit:
-            instance.save()
+            instance.save(commit)
         return instance

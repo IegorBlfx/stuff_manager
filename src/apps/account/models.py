@@ -67,7 +67,7 @@ class RequestDayOff(models.Model):
         super().save(*args, **kwargs)
 
     #def __str__(self):
-        #return 'request'
+        #return user thrue user_id
 
 
     # TODO
@@ -127,3 +127,4 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return self.title
+# obj.get_{field}_display() -
