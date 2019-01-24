@@ -1,12 +1,40 @@
 
+python manage.py shell
+python manage.py makemigrations
+python manage.py migrate
 
-Test?????
+
+# python manage.py runserver
+# celery -A stuff_manager worker -l info -B  # activate env
+# celery -A stuff_manager beat -l info -B  # activate env
 
 
+1. Add cache_page for faq and tos pages
+2. # TODO subtract dayoffs or vacations on Form Approve
+3. on approve or reject send email to user with different text (using celery)
+4. if form is rejected make field 'reason as required'  (def clean())
+5. Add date_field RequestDayOff (when status was changed to approve or rejected)
+6. Add celerybeat task (all RequestDayOff that are older than 1 month, mark as past due (new status)) call task every day
+# json format
 
+# django signals
+# tests
+# nginx gunicorn
+# context_processor
+# Query Manager
 
-2. RequestDayOff Model def __str__
-3. RequestDayOff add to Admin status + type filters
-4. RequestDayOffAdmin
-  - def get_readonly_fields()
-  - if obj.status != mch.STATUS_PENDING make status field readonly
+# .only, .deffer
+# docker???
+
+# git commands
+1. git init
+2. git status
+3. git add src/
+4. git log
+5. git push -u origin master
+6. git branch -a
+7. git checkout -b branch_name (create branch and change branch)
+8. git checkout branch_name (change branch)
+9. git pull origin master
+10. git fetch (update repo)
+

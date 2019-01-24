@@ -5,10 +5,40 @@ from django.contrib.auth.decorators import login_required
 from apps.account.forms import ProfileForm, ContactUsForm, RequestDayOffForm
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 
 
 def index(request):
+    #from apps.account.tasks import send_email_async
+
+    #send_email_async.delay(subject = 'Thank you for your information',
+    #message = ' it  means a world to us ',
+    #email_from = settings.EMAIL_HOST_USER,
+    #recipient_list = [f'{email_for}', ],)
+
+
+
+    from apps.account.models import User
+    key = 'user_cache'
+    if key in cache:  # check if users exist in cache
+        users = cache.get(key)  # get users from cache
+        print('11' * 100)
+    else:
+        users = list(User.objects.all()[:100])  # get users from db
+        cache.set(key, users, 15)  # set cache with key='user_cache', write 100 users for 15 seconds
+        print('222' * 100)
+
     return HttpResponse('Index')
+
+# cache.delete(key)  # to delete cache by key
+
+@cache_page(10)
+def cache_test(r):
+    from time import sleep
+    sleep(10)
+    return HttpResponse('Cache Test')
+
 
 @login_required  # profile = login_required(profile)
 def profile(request):

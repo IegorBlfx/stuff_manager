@@ -20,6 +20,18 @@ class UserAdmin(admin.ModelAdmin):
                 return UserAdminForm
             else:
                 return super().get_form(request, obj, **kwargs)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj is not None:
+            return not obj.is_superuser
+        return False
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            return qs.exclude(is_superuser=True)
+
+        return qs
 admin.site.register(User, UserAdmin)
 
 @admin.register(City)

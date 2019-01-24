@@ -153,4 +153,38 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 #CELERY_TIMEZONE = 'Asia/Makassar'
-CELERY_BEAT_SCHEDULE = {}
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'task-number-one': {
+        'task': 'apps.account.tasks.task_number_one',
+        'schedule': crontab(minute='*/2'),
+        'args': ()
+    },
+
+    'increment_dayoffs': {
+        'task': 'apps.account.tasks.increment_dayoffs',
+        'schedule': crontab(month_of_year='*/1'),
+        'args': (),
+    }
+}
+
+if DEBUG:
+    CELERY_BEAT_SCHEDULE['increment_dayoffs']['schedule'] = crontab(minute='*/10')
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "example"
+    }
+}
+
+
+from pdb import set_trace
+__builtins__['st'] = set_trace # st()

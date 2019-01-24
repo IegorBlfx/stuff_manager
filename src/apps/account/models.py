@@ -41,7 +41,16 @@ class User(AbstractUser):
     def get_salary_per_year(self):
         salary_per_year = self.get_salary() * 12
         return salary_per_year
+
+    @property
+    def is_hr(self):
+        return self.groups.filter(name='HR').exists()
+
+    def save(self, *args, **kwargs):
+        self.username = self.email
+        super().save(*args, **kwargs)
     #prevent User delete
+
 
 
 class RequestDayOff(models.Model):

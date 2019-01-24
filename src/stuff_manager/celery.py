@@ -17,5 +17,5 @@ app.autodiscover_tasks()
 
 
 #@app.task(bind=True)
-def debug_task():
-    print('Hello from celery')
+#def debug_task():
+    #print('Hello from celery')
