@@ -32,6 +32,14 @@ def index(request):
     return HttpResponse('Index')
 
 # cache.delete(key)  # to delete cache by key
+@cache_page(10*60)
+def tos(request):
+    return HttpResponse('tos')
+
+@cache_page(10*60)
+def FAQ(request):
+    return HttpResponse('FAQ')
+
 
 @cache_page(10)
 def cache_test(r):
@@ -53,6 +61,7 @@ def profile(request):
 
     context = {'form': form}
     return render(request, 'account/profile.html', context=context)
+
 
 def contact_us(request):
     if request.method == 'GET':

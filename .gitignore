@@ -2,3 +2,5 @@ env/
 .idea/
 
 __pycashe__/
+src/static/
+src/stuff_manager/settings_local*

@@ -70,6 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.context_processors.global_context',
             ],
         },
     },
@@ -131,6 +132,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 #custom settings
 AUTH_USER_MODEL = 'account.User'
 
@@ -185,6 +187,10 @@ CACHES = {
     }
 }
 
+try:
+    from stuff_manager.settings_local import*
+except ImportError:
+    print('No local settings loaded'*10)
 
-from pdb import set_trace
-__builtins__['st'] = set_trace # st()
+
+
