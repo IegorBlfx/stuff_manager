@@ -174,7 +174,7 @@ CELERY_BEAT_SCHEDULE = {
 if DEBUG:
     CELERY_BEAT_SCHEDULE['increment_dayoffs']['schedule'] = crontab(minute='*/10')
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 CACHES = {
     "default": {

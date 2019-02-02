@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from apps.account.forms import ProfileForm, ContactUsForm, RequestDayOffForm
-from django.core.mail import send_mail
 from django.conf import settings
 from django.core.cache import cache
 from django.views.decorators.cache import cache_page
+from apps.account.methods import _email
 
 
 def index(request):
@@ -99,11 +99,6 @@ def create_request(request):
     context = {'form': form}
     return render(request, 'account/create-request.html', context=context)
 
-def _email(request, email_for):
-    subject = 'Thank you for your information'
-    message = ' it  means a world to us '
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = [f'{email_for}', ]
-    send_mail(subject, message, email_from, recipient_list)
-    return
+
+
 

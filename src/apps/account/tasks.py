@@ -26,10 +26,10 @@ def increment_dayoffs():
 
 @shared_task
 def send_email_async(*args, **kwargs):
-    from apps.account.models import User
+    #from apps.account.models import User
 
-    user_id = kwargs.pop('user')
-    user = User.objects.get(id=user_id)
+    #user_id = kwargs.pop('user')
+    #user = User.objects.get(id=user_id)
 
     send_mail(*args, **kwargs)
         # subject='Subject here',

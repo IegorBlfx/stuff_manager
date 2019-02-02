@@ -1,13 +1,13 @@
 from django.contrib import admin
 from apps.account.models import *
-from apps.account.forms import UserAdminForm
+from apps.account.forms import UserAdminForm, RequestDayOffAdminForm
 from apps import model_choices as mch
 
 
 class UserAdmin(admin.ModelAdmin):
     readonly_fields = []
     search_fields = ['phone', 'email']
-    list_display = ('username', 'get_salary',)
+    list_display = ('username', 'get_salary', 'vacations_days')
     list_filter = ('position',)
 
     def get_readonly_fields(self, request, obj=None):
@@ -56,17 +56,21 @@ class ContactUsAdmin(admin.ModelAdmin):
 
 @admin.register(RequestDayOff)
 class RequestDayOffAdmin(admin.ModelAdmin):
-    readonly_fields = ('user', 'type')
+    form = RequestDayOffAdminForm
+    readonly_fields = ('user', 'type', 'created', 'date_from', 'date_to')
     list_display = ('user', 'status',)
     list_filter = ('type', 'status',)
-    #TODO ADD form
+
+
+
+
 
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = super().get_readonly_fields(self, request)
         if obj is not None:
             if obj.status != mch.STATUS_PENDING:
-                readonly_fields += ('created', 'date_from', 'date_to', 'reason', 'status')
-                return readonly_fields
+                readonly_fields += ('reason', 'status')
+        return readonly_fields
 
 
 

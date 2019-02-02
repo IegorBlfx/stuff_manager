@@ -4,7 +4,9 @@ from apps.account.models import User, ContactUs, RequestDayOff
 from django.db.models import Q
 import numpy as np
 from apps import model_choices as mch
-
+from django.conf import settings
+from django.core.mail import send_mail
+from builtins import st
 
 class ProfileForm(forms.ModelForm):
 
@@ -19,7 +21,8 @@ class ProfileForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         # TODO
-
+#####################################################################
+####################################################################
 class ContactUsForm (forms.ModelForm):
 
     class Meta:
@@ -29,7 +32,8 @@ class ContactUsForm (forms.ModelForm):
             'title',
             'text'
         ]
-
+#####################################################################
+####################################################################
 class UserAdminForm(forms.ModelForm):
     class Meta:
         model = User
@@ -45,9 +49,40 @@ class UserAdminForm(forms.ModelForm):
                                    Q(username=cleaned_data['email'])).exists():
                 raise forms.ValidationError('User already exists')
         return cleaned_data
+#####################################################################
+####################################################################
+class RequestDayOffAdminForm(forms.ModelForm):
 
+    class Meta:
+        model = RequestDayOff
 
+        fields = [
+        'user',
+        'date_from', 'date_to',
+        'type', 'reason',
+        'status',
+        ]
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        cleaned_data = super().clean()
+        self.user = instance.user
+        #st()
+        if cleaned_data['status'] == mch.STATUS_CONFIRMED:
+            from apps.account.tasks import send_email_async
+            send_email_async.delay(
+            subject = 'Thank you for your information',
+            message = ' Injoy your vacation ',
+            from_email = settings.EMAIL_HOST_USER,
+            recipient_list=[f'{self.user.email}', ]
+           )
+        #elif cleaned_data['status'] == mch.STATUS_REJECT:
+           # _email(request, email_for=cleaned_data['user'])
+        if commit:
+            instance.save(commit)
+        return instance
 
+#####################################################################
+####################################################################
 class RequestDayOffForm(forms.ModelForm):
     class Meta:
         model = RequestDayOff
@@ -74,10 +109,7 @@ class RequestDayOffForm(forms.ModelForm):
             if np.busday_count(cleaned_data['date_from'], cleaned_data['date_to']) > self.user.vacations_days:
                 self.add_error('date_to', "You can't more days, than you have")
 
-            # 1 dayoff is only for one day (more is vacation)
-            # 2 date_to should be less than date_from
-            # 3 date_from - date_to (in days) should not be greater than 20 (do not count weekends)
-            # 4 dayoffs/vacation cannot be more than user has (user.vacation >= days)
+
         return cleaned_data
 
     def save(self, commit=True):

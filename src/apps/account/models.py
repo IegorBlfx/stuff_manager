@@ -3,6 +3,8 @@ from phone_field import PhoneField
 from django.contrib.auth.models import AbstractUser
 from datetime import date
 from apps import model_choices as mch
+import numpy as np
+from builtins import st
 
 
 
@@ -46,9 +48,6 @@ class User(AbstractUser):
     def is_hr(self):
         return self.groups.filter(name='HR').exists()
 
-    def save(self, *args, **kwargs):
-        self.username = self.email
-        super().save(*args, **kwargs)
     #prevent User delete
 
 
@@ -70,10 +69,21 @@ class RequestDayOff(models.Model):
         default=mch.STATUS_PENDING,
     )
 
+    def subtract_day_off(self):
+        user_day_limit = self.user.vacations_days
+        user_day_off = np.busday_count(self.date_from, self.date_to)
+        new_vacation = int(user_day_limit - user_day_off)
+        self.user.vacations_days = new_vacation
+        self.user.save()
+
+
     def save(self, *args, **kwargs):
         if self.date_from > self.date_to:
             raise IntegrityError('date_from must be less, than date_to')
+        if self.status == mch.STATUS_CONFIRMED:
+            self.subtract_day_off()
         super().save(*args, **kwargs)
+
 
     #def __str__(self):
         #return user thrue user_id
